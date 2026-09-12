@@ -1,0 +1,12 @@
+Bzbxddbx\privateBlocksPlugin\config\PluginSettings.class
+Bzbxddbx\privateBlocksPlugin\listener\BlockProtectedListener.class
+Bzbxddbx\privateBlocksPlugin\config\ClaimTier.class
+Bzbxddbx\privateBlocksPlugin\block\Claim.class
+Bzbxddbx\privateBlocksPlugin\command\PrivateBlocksCommand.class
+Bzbxddbx\privateBlocksPlugin\block\repository\sqlite\ClaimDao.class
+Bzbxddbx\privateBlocksPlugin\block\BlockKey.class
+Bzbxddbx\privateBlocksPlugin\PrivateBlocksPlugin.class
+Bzbxddbx\privateBlocksPlugin\block\ClaimManager.class
+Bzbxddbx\privateBlocksPlugin\block\repository\ClaimRepository.class
+Bzbxddbx\privateBlocksPlugin\block\ClaimCreateResult.class
+Bzbxddbx\privateBlocksPlugin\block\repository\SqlClaimRepository.class

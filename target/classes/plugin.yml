@@ -1,0 +1,10 @@
+name: PrivateBlocksPlugin
+version: '1'
+
+main: Bzbxddbx.privateBlocksPlugin.PrivateBlocksPlugin
+api-version: '26.2'
+load: POSTWORLD
+
+commands:
+  pbhelp:
+    description: "Показывает информацию о радиусах приват-блоков"
