@@ -22,16 +22,22 @@ public class PluginSettings {
 
     private final List<ClaimTier> tiers;
     private final boolean restoreMissingBlocks;
+    private final boolean pistonProtection;
     private final Plugin plugin;
 
     public PluginSettings(FileConfiguration config, Plugin plugin) {
         this.plugin = plugin;
         this.restoreMissingBlocks = config.getBoolean("restore-missing-blocks", true);
+        this.pistonProtection = config.getBoolean("piston-protection", true);
         this.tiers = parseTiers(config);
     }
 
     public boolean isRestoreMissingBlocksEnabled() {
         return restoreMissingBlocks;
+    }
+
+    public boolean isPistonProtectionEnabled() {
+        return pistonProtection;
     }
 
     public Optional<ClaimTier> tierFor(Material material) {

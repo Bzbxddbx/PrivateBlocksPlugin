@@ -47,6 +47,15 @@ public class ClaimManager {
         return repository.findContaining(BlockKey.from(location));
     }
 
+    public boolean isPistonMoveAllowed(Location pistonLocation, Location destination) {
+        Optional<Claim> destinationClaim = findClaim(destination);
+        if (destinationClaim.isEmpty()) {
+            return true;
+        }
+        Optional<Claim> pistonClaim = findClaim(pistonLocation);
+        return pistonClaim.isPresent() && pistonClaim.get().equals(destinationClaim.get());
+    }
+
     public Collection<Claim> findAll() {
         return repository.findAll();
     }

@@ -6,6 +6,7 @@ import Bzbxddbx.privateBlocksPlugin.block.repository.SqlClaimRepository;
 import Bzbxddbx.privateBlocksPlugin.command.PrivateBlocksCommand;
 import Bzbxddbx.privateBlocksPlugin.config.PluginSettings;
 import Bzbxddbx.privateBlocksPlugin.listener.BlockProtectedListener;
+import Bzbxddbx.privateBlocksPlugin.listener.PistonProtectionListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -32,6 +33,10 @@ public final class PrivateBlocksPlugin extends JavaPlugin {
         BlockProtectedListener protectionListener = new BlockProtectedListener(claimManager, settings);
 
         getServer().getPluginManager().registerEvents(protectionListener, this);
+
+        if (settings.isPistonProtectionEnabled()) {
+            getServer().getPluginManager().registerEvents(new PistonProtectionListener(claimManager), this);
+        }
 
         getCommand("pbhelp").setExecutor(new PrivateBlocksCommand());
     }

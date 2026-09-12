@@ -10,4 +10,5 @@ Bzbxddbx\privateBlocksPlugin\PrivateBlocksPlugin.class
 Bzbxddbx\privateBlocksPlugin\block\ClaimManager.class
 Bzbxddbx\privateBlocksPlugin\block\repository\ClaimRepository.class
 Bzbxddbx\privateBlocksPlugin\block\ClaimCreateResult.class
+Bzbxddbx\privateBlocksPlugin\listener\PistonProtectionListener.class
 Bzbxddbx\privateBlocksPlugin\block\repository\SqlClaimRepository.class

@@ -1,4 +1,5 @@
 restore-missing-blocks: true
+piston-protection: true
 
 claims:
   EMERALD_BLOCK: 15
