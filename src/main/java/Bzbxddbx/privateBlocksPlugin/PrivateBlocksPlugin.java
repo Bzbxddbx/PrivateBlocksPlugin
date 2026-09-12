@@ -1,5 +1,6 @@
 package Bzbxddbx.privateBlocksPlugin;
 
+import Bzbxddbx.privateBlocksPlugin.block.ClaimBlockRestorer;
 import Bzbxddbx.privateBlocksPlugin.block.ClaimManager;
 import Bzbxddbx.privateBlocksPlugin.block.repository.SqlClaimRepository;
 import Bzbxddbx.privateBlocksPlugin.command.PrivateBlocksCommand;
@@ -23,6 +24,10 @@ public final class PrivateBlocksPlugin extends JavaPlugin {
         claimRepository.loadFromDisk();
 
         ClaimManager claimManager = new ClaimManager(claimRepository);
+
+        if (settings.isRestoreMissingBlocksEnabled()) {
+            new ClaimBlockRestorer(claimManager, settings, getLogger()).restoreMissingBlocks();
+        }
 
         BlockProtectedListener protectionListener = new BlockProtectedListener(claimManager, settings);
 

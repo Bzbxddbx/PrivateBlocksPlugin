@@ -15,20 +15,20 @@ public class PrivateBlocksCommand implements CommandExecutor {
 
         // Список блоков
         sender.sendMessage(Component.text("- ", NamedTextColor.GRAY)
-                .append(Component.text("Золотой блок: ", NamedTextColor.YELLOW))
-                .append(Component.text("радиус 7х7x7", NamedTextColor.GREEN)));
+                .append(Component.text("Золотой блок: ", NamedTextColor.GOLD))
+                .append(Component.text("радиус 7х7x7", NamedTextColor.WHITE)));
 
         sender.sendMessage(Component.text("- ", NamedTextColor.GRAY)
                 .append(Component.text("Алмазный блок: ", NamedTextColor.AQUA))
-                .append(Component.text("радиус 9х9x9", NamedTextColor.GREEN)));
+                .append(Component.text("радиус 9х9x9", NamedTextColor.WHITE)));
 
         sender.sendMessage(Component.text("- ", NamedTextColor.GRAY)
                 .append(Component.text("Изумрудный блок: ", NamedTextColor.GREEN))
-                .append(Component.text("радиус 15x15x15", NamedTextColor.GREEN)));
+                .append(Component.text("радиус 15x15x15", NamedTextColor.WHITE)));
 
         sender.sendMessage(Component.text("- ", NamedTextColor.GRAY)
                 .append(Component.text("Незеритовый блок: ", NamedTextColor.DARK_GRAY))
-                .append(Component.text("радиус 21x21x21", NamedTextColor.GREEN)));
+                .append(Component.text("радиус 21x21x21", NamedTextColor.WHITE)));
 
         sender.sendMessage(Component.text("================================", NamedTextColor.GOLD));
 

@@ -3,6 +3,7 @@ package Bzbxddbx.privateBlocksPlugin.block;
 import Bzbxddbx.privateBlocksPlugin.block.repository.ClaimRepository;
 import org.bukkit.Location;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -44,5 +45,9 @@ public class ClaimManager {
 
     public Optional<Claim> findClaim(Location location) {
         return repository.findContaining(BlockKey.from(location));
+    }
+
+    public Collection<Claim> findAll() {
+        return repository.findAll();
     }
 }

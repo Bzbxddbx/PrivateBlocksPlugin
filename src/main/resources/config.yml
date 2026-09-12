@@ -1,3 +1,5 @@
+restore-missing-blocks: true
+
 claims:
   EMERALD_BLOCK: 15
   DIAMOND_BLOCK: 9

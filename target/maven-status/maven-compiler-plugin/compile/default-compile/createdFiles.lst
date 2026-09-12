@@ -1,6 +1,7 @@
 Bzbxddbx\privateBlocksPlugin\config\PluginSettings.class
 Bzbxddbx\privateBlocksPlugin\listener\BlockProtectedListener.class
 Bzbxddbx\privateBlocksPlugin\config\ClaimTier.class
+Bzbxddbx\privateBlocksPlugin\block\ClaimBlockRestorer.class
 Bzbxddbx\privateBlocksPlugin\block\Claim.class
 Bzbxddbx\privateBlocksPlugin\command\PrivateBlocksCommand.class
 Bzbxddbx\privateBlocksPlugin\block\repository\sqlite\ClaimDao.class
