@@ -6,8 +6,7 @@ import Bzbxddbx.privateBlocksPlugin.block.ClaimCreateResult;
 import Bzbxddbx.privateBlocksPlugin.block.ClaimManager;
 import Bzbxddbx.privateBlocksPlugin.config.ClaimTier;
 import Bzbxddbx.privateBlocksPlugin.config.PluginSettings;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -19,6 +18,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import java.util.Optional;
 
 public class BlockProtectedListener implements Listener {
+
+    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 
     private final ClaimManager claimManager;
     private final PluginSettings settings;
@@ -39,7 +40,7 @@ public class BlockProtectedListener implements Listener {
 
             if (!player.getUniqueId().equals(claim.getOwner())) {
                 event.setCancelled(true);
-                player.sendMessage(Component.text("Эта территория принадлежит другому игроку!", NamedTextColor.RED));
+                player.sendMessage(MINI_MESSAGE.deserialize("<red>Эта территория принадлежит другому игроку!</red>"));
                 return;
             }
         }
@@ -54,12 +55,12 @@ public class BlockProtectedListener implements Listener {
 
         if (result == ClaimCreateResult.OVERLAPS) {
             event.setCancelled(true);
-            player.sendMessage(Component.text("Здесь пересекается территория привата!", NamedTextColor.RED));
+            player.sendMessage(MINI_MESSAGE.deserialize("<red>Здесь пересекается территория привата!</red>"));
             return;
         }
 
-        player.sendMessage(Component.text("Вы установили приват-блок "
-                + tier.get().getSize() + "x" + tier.get().getSize() + "x" + tier.get().getSize() + "!", NamedTextColor.GREEN));
+        player.sendMessage(MINI_MESSAGE.deserialize("<green>Вы установили приват-блок "
+                + tier.get().getSize() + "x" + tier.get().getSize() + "x" + tier.get().getSize() + "!</green>"));
     }
 
     @EventHandler
@@ -75,13 +76,13 @@ public class BlockProtectedListener implements Listener {
 
         if (!player.getUniqueId().equals(claim.getOwner())) {
             event.setCancelled(true);
-            player.sendMessage(Component.text("Эта территория принадлежит другому игроку!", NamedTextColor.RED));
+            player.sendMessage(MINI_MESSAGE.deserialize("<red>Эта территория принадлежит другому игроку!</red>"));
             return;
         }
 
         if (BlockKey.from(block.getLocation()).equals(claim.getCenter())) {
             claimManager.removeClaim(block.getLocation());
-            player.sendMessage(Component.text("Вы убрали свой приват-блок.", NamedTextColor.YELLOW));
+            player.sendMessage(MINI_MESSAGE.deserialize("<yellow>Вы убрали свой приват-блок.</yellow>"));
         }
     }
 }

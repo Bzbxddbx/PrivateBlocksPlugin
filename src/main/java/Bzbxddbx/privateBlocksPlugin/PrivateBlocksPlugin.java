@@ -7,13 +7,21 @@ import Bzbxddbx.privateBlocksPlugin.command.PrivateBlocksCommand;
 import Bzbxddbx.privateBlocksPlugin.config.PluginSettings;
 import Bzbxddbx.privateBlocksPlugin.listener.BlockProtectedListener;
 import Bzbxddbx.privateBlocksPlugin.listener.PistonProtectionListener;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
+import java.nio.file.Path;
+import java.util.List;
 
 public final class PrivateBlocksPlugin extends JavaPlugin {
 
+    private final Path dataDirectory;
+
     private SqlClaimRepository claimRepository;
+
+    public PrivateBlocksPlugin(Path dataDirectory) {
+        this.dataDirectory = dataDirectory;
+    }
 
     @Override
     public void onEnable() {
@@ -21,13 +29,13 @@ public final class PrivateBlocksPlugin extends JavaPlugin {
 
         PluginSettings settings = new PluginSettings(getConfig(), this);
 
-        claimRepository = new SqlClaimRepository(new File(getDataFolder(), "claims.db"), getLogger());
+        claimRepository = new SqlClaimRepository(dataDirectory.resolve("claims.db"), getLogger());
         claimRepository.loadFromDisk();
 
         ClaimManager claimManager = new ClaimManager(claimRepository);
 
         if (settings.isRestoreMissingBlocksEnabled()) {
-            new ClaimBlockRestorer(claimManager, settings, getLogger()).restoreMissingBlocks();
+            new ClaimBlockRestorer(claimManager, settings, this).restoreMissingBlocks();
         }
 
         BlockProtectedListener protectionListener = new BlockProtectedListener(claimManager, settings);
@@ -38,7 +46,12 @@ public final class PrivateBlocksPlugin extends JavaPlugin {
             getServer().getPluginManager().registerEvents(new PistonProtectionListener(claimManager), this);
         }
 
-        getCommand("pbhelp").setExecutor(new PrivateBlocksCommand());
+        getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event ->
+                event.registrar().register(
+                        PrivateBlocksCommand.create().build(),
+                        "Показывает информацию о радиусах приват-блоков",
+                        List.of()
+                ));
     }
 
     @Override

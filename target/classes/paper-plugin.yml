@@ -2,5 +2,5 @@ name: PrivateBlocksPlugin
 version: '1'
 
 main: Bzbxddbx.privateBlocksPlugin.PrivateBlocksPlugin
+bootstrapper: Bzbxddbx.privateBlocksPlugin.PrivateBlocksBootstrapper
 api-version: '26.2'
-load: POSTWORLD

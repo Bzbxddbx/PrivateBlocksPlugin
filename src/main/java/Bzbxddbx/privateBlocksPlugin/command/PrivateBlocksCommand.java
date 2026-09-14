@@ -1,37 +1,37 @@
 package Bzbxddbx.privateBlocksPlugin.command;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
-public class PrivateBlocksCommand implements CommandExecutor {
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
-        sender.sendMessage(Component.text("====== [ Private Blocks ] ======", NamedTextColor.GOLD));
-        sender.sendMessage(Component.text("Доступные блоки для защиты территории:", NamedTextColor.YELLOW));
+public final class PrivateBlocksCommand {
 
-        // Список блоков
-        sender.sendMessage(Component.text("- ", NamedTextColor.GRAY)
-                .append(Component.text("Золотой блок: ", NamedTextColor.GOLD))
-                .append(Component.text("радиус 7х7x7", NamedTextColor.WHITE)));
+    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 
-        sender.sendMessage(Component.text("- ", NamedTextColor.GRAY)
-                .append(Component.text("Алмазный блок: ", NamedTextColor.AQUA))
-                .append(Component.text("радиус 9х9x9", NamedTextColor.WHITE)));
+    private PrivateBlocksCommand() {
+    }
 
-        sender.sendMessage(Component.text("- ", NamedTextColor.GRAY)
-                .append(Component.text("Изумрудный блок: ", NamedTextColor.GREEN))
-                .append(Component.text("радиус 15x15x15", NamedTextColor.WHITE)));
+    public static LiteralArgumentBuilder<CommandSourceStack> create() {
+        return Commands.literal("pbhelp")
+                .executes(context -> {
+                    context.getSource().getSender().sendMessage(
+                            MINI_MESSAGE.deserialize("<gold>====== [ Private Blocks ] ======</gold>"));
+                    context.getSource().getSender().sendMessage(
+                            MINI_MESSAGE.deserialize("<yellow>Доступные блоки для защиты территории:</yellow>"));
 
-        sender.sendMessage(Component.text("- ", NamedTextColor.GRAY)
-                .append(Component.text("Незеритовый блок: ", NamedTextColor.DARK_GRAY))
-                .append(Component.text("радиус 21x21x21", NamedTextColor.WHITE)));
+                    context.getSource().getSender().sendMessage(
+                            MINI_MESSAGE.deserialize("<gray>- </gray><gold>Золотой блок: </gold><white>радиус 7х7x7</white>"));
+                    context.getSource().getSender().sendMessage(
+                            MINI_MESSAGE.deserialize("<gray>- </gray><aqua>Алмазный блок: </aqua><white>радиус 9х9x9</white>"));
+                    context.getSource().getSender().sendMessage(
+                            MINI_MESSAGE.deserialize("<gray>- </gray><green>Изумрудный блок: </green><white>радиус 15x15x15</white>"));
+                    context.getSource().getSender().sendMessage(
+                            MINI_MESSAGE.deserialize("<gray>- </gray><dark_gray>Незеритовый блок: </dark_gray><white>радиус 21x21x21</white>"));
 
-        sender.sendMessage(Component.text("================================", NamedTextColor.GOLD));
-
-        return true;
+                    context.getSource().getSender().sendMessage(
+                            MINI_MESSAGE.deserialize("<gold>================================</gold>"));
+                    return 1;
+                });
     }
 }

@@ -4,15 +4,16 @@ import Bzbxddbx.privateBlocksPlugin.block.BlockKey;
 import Bzbxddbx.privateBlocksPlugin.block.Claim;
 import Bzbxddbx.privateBlocksPlugin.block.repository.sqlite.ClaimDao;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,17 +23,13 @@ public class SqlClaimRepository implements ClaimRepository {
 
     private final Map<BlockKey, Claim> claimsByCenter = new LinkedHashMap<>();
     private final ClaimDao claimDao;
-    private final ExecutorService writeExecutor;
     private final Logger logger;
+    private volatile CompletableFuture<Void> writeTail;
     private boolean closed;
 
-    public SqlClaimRepository(File databaseFile, Logger logger) {
-        this.claimDao = new ClaimDao("jdbc:sqlite:" + databaseFile.getAbsolutePath(), logger);
-        this.writeExecutor = Executors.newSingleThreadExecutor(runnable -> {
-            Thread thread = new Thread(runnable, "PrivateClaims-Writer");
-            thread.setDaemon(true);
-            return thread;
-        });
+    public SqlClaimRepository(Path databaseFile, Logger logger) {
+        this.claimDao = new ClaimDao("jdbc:sqlite:" + databaseFile.toAbsolutePath(), logger);
+        this.writeTail = CompletableFuture.completedFuture(null);
         this.logger = logger;
     }
 
@@ -46,13 +43,21 @@ public class SqlClaimRepository implements ClaimRepository {
     @Override
     public void save(Claim claim) {
         claimsByCenter.put(claim.getCenter(), claim);
-        writeExecutor.submit(() -> claimDao.insert(claim));
+        enqueue(() -> claimDao.insert(claim));
     }
 
     @Override
     public void delete(Claim claim) {
         claimsByCenter.remove(claim.getCenter(), claim);
-        writeExecutor.submit(() -> claimDao.delete(claim.getCenter()));
+        enqueue(() -> claimDao.delete(claim.getCenter()));
+    }
+
+    private void enqueue(Runnable task) {
+        CompletableFuture<Void> chain = writeTail.thenRunAsync(task);
+        writeTail = chain.exceptionally(exception -> {
+            logger.log(Level.SEVERE, "Запись в БД прервана.", exception);
+            return null;
+        });
     }
 
     @Override
@@ -83,14 +88,13 @@ public class SqlClaimRepository implements ClaimRepository {
         }
         closed = true;
 
-        writeExecutor.shutdown();
         try {
-            if (!writeExecutor.awaitTermination(FLUSH_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
-                logger.warning("Не все изменения приватов удалось записать в БД за отведенное время.");
-            }
+            writeTail.get(FLUSH_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         } catch (InterruptedException exception) {
             Thread.currentThread().interrupt();
             logger.log(Level.WARNING, "Поток выключения был прерван во время сохранения приватов.", exception);
+        } catch (ExecutionException | TimeoutException exception) {
+            logger.log(Level.WARNING, "Не все изменения приватов удалось записать в БД за отведенное время.", exception);
         }
     }
 }
